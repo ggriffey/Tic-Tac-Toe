@@ -9,10 +9,12 @@ const s8 = document.querySelector(".s8");
 const s9 = document.querySelector(".s9");
 
 const squares = [s1, s2, s3, s4, s5, s6, s7, s8, s9];
-
 const oTurn = "O";
 const xTurn = "X";
+
 let turnCount = 1;
+let winBool = false;
+let winner = "";
 
 let xCurrentSquares = [];
 let oCurrentSquares = [];
@@ -26,9 +28,8 @@ let winConditions = [
   [1, 5, 9],
   [3, 5, 7],
 ];
-let winBool = false;
-let winner = "";
 
+// SHOW WIN SCREEN
 const winScreen = () => {
   document.querySelector("body").classList.remove("green");
   document.querySelector("body").classList.add("blue");
@@ -37,6 +38,7 @@ const winScreen = () => {
   document.querySelector(".message").textContent = "CONGRATULATIONS!";
 };
 
+// Helper function for checkWin
 const arrayContainsArray = function (superset, subset) {
   if (0 === subset.length) {
     return false;
@@ -46,6 +48,7 @@ const arrayContainsArray = function (superset, subset) {
   });
 };
 
+// Check for winner after each turn
 const checkWin = () => {
   xCurrentSquares.sort();
   oCurrentSquares.sort();
@@ -71,18 +74,21 @@ const checkWin = () => {
   winBool ? winScreen() : console.log("not yet...");
 };
 
+// update player O
 const oActions = (num) => {
   oCurrentSquares.push(num);
   turnCount++;
   document.querySelector(".message").textContent = "Player X turn";
 };
 
+// update player X
 const xActions = (num) => {
   xCurrentSquares.push(num);
   turnCount++;
   document.querySelector(".message").textContent = "Player O turn";
 };
 
+// Carry out actions each turn
 for (let i = 0; i < squares.length; i++) {
   squares[i].addEventListener("click", function () {
     console.log(`You clicked ${squares[i]}`);
@@ -98,3 +104,28 @@ for (let i = 0; i < squares.length; i++) {
     checkWin();
   });
 }
+
+// Reset button
+const button = document.querySelector("button");
+
+const reset = () => {
+  document.querySelector("body").classList.add("green");
+  document.querySelector("body").classList.remove("blue");
+  document.querySelector("h1").style.fontSize = "4rem";
+  document.querySelector("h1").textContent = "Let's Play Tic Tac Toe!";
+  document.querySelector(".message").textContent = 'Player "O" goes first...';
+
+  turnCount = 1;
+  winBool = false;
+  winner = "";
+  xCurrentSquares = [];
+  oCurrentSquares = [];
+
+  for (let i = 0; i < squares.length; i++) {
+    squares[i].textContent = "";
+  }
+};
+
+button.addEventListener("click", () => {
+  reset();
+});
